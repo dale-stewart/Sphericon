@@ -1,4 +1,4 @@
-function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order)  - (order % 2) * (-90/order)];
+function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order) - (order % 2) * (-90/order)];
 
 function polygon_points(order) = [ for (th=polygon_angles(order)) [cos(th), sin(th)] ];
 
@@ -44,4 +44,11 @@ module sphericon(N)
     }
 }
 
-scale(25) rotate([-90,0,0]) half_sphericon_shell(11);
+module sphericon_shell(N)
+{
+    union()
+    {
+        half_sphericon_shell(N);
+        rotate([0,360/N,180]) half_sphericon_shell(N);
+    }
+}
