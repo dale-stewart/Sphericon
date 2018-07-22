@@ -7,12 +7,12 @@ module regular_polygon(order)
     polygon(polygon_points(order));
 }
 
-module shape(N)
+module extruded_shape(N)
 {
     difference()
     {
         regular_polygon(N);
-        translate([-1, 0]) square([2,4], center=true);
+        translate([-0.5, 0]) square([1,2], center=true);
     }
 }
 
@@ -20,7 +20,7 @@ module half_sphericon(N)
 {
     difference()
     {
-        rotate_extrude($fn=360) shape(N);
+        rotate_extrude() extruded_shape(N);
         translate([-1,0,-1]) cube([2,2,2]);
     }
 }
