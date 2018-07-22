@@ -1,4 +1,4 @@
-function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order) - (order % 2) * (-90/order) - (1 - (order % 2)) * (180/order)];
+function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order) - 90];
 
 function polygon_points(order) = [ for (th=polygon_angles(order)) [cos(th), sin(th)] ];
 
