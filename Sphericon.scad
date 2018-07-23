@@ -2,18 +2,13 @@ function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order) - 90];
 
 function polygon_points(order) = [ for (th=polygon_angles(order)) [cos(th), sin(th)] ];
 
+function polygon_side_midpoints(order) = [ for (i=[0:order-1]) (polygon_points(order)[i] + polygon_points(order)[(i+1)%order]) / 2 ];
+
+function polygon_side_length(order) = norm(polygon_points(order)[1] - polygon_points(order)[0]);
+
 module regular_polygon(order)
 {
     polygon(polygon_points(order));
-}
-
-module extruded_shape(N)
-{
-    difference()
-    {
-        regular_polygon(N);
-        translate([-0.5, 0]) square([1,2], center=true);
-    }
 }
 
 module half_sphericon(N)
@@ -21,7 +16,7 @@ module half_sphericon(N)
     difference()
     {
         rotate_extrude() extruded_shape(N);
-        translate([-1,0,-1]) cube([2,2,2]);
+        translate([-2,0,-2]) cube([4,4,4]);
     }
 }
 

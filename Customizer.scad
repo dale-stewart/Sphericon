@@ -1,8 +1,8 @@
 // About how big do you want it to be, in millimeters?
-scale = 75;
+scale = 50;
 
 // How many sides should the polygon have?
-sides = 16; // [3:32]
+sides = 10; // [3:32]
 
 // Do you want to see the shape of the polygon without the rotate extrustion?
 polygon_only = "No"; // ["No", "Yes"]
@@ -19,7 +19,43 @@ hollow = "No"; // ["No", "Yes"]
 // How smooth should it be? (More faces is smoother)
 faces = 360; // [10:360]
 
-use <Sphericon.scad>
+// Do you want a continuous face or edge (for even numbers of sides only)
+continuous = "Face"; // ["Face", "Edge"]
+
+// Do you want a bulbous appearance?
+bulbous = "No"; // ["No", "Yes"]
+
+module modified_polygon(N)
+{
+    difference()
+    {
+        union()
+        {
+            regular_polygon(N);
+            if (bulbous == "Yes")
+                for(p = polygon_points(N))
+                    translate(p) circle(r=polygon_side_length(N)/3, $fn=90);
+        }
+        if (bulbous == "Yes")
+            for(p = polygon_side_midpoints(N))
+                translate(p) circle(r=polygon_side_length(N)/6, $fn=90);
+    }
+}
+
+module extruded_shape(N)
+{
+    difference()
+    {
+        if (continuous == "Face")
+            modified_polygon(N);
+        else
+            rotate(180/N) modified_polygon(N);
+
+        translate([-1, 0]) square([2,4], center=true);
+    }
+}
+
+include <Sphericon.scad>
 
 $fn=faces;
 
