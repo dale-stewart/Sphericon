@@ -2,13 +2,13 @@
 scale = 50;
 
 // How many sides should the polygon have?
-sides = 10; // [3:32]
+sides = 9; // [3:32]
 
 // Do you want to see the shape of the polygon without the rotate extrustion?
 polygon_only = "No"; // ["No", "Yes"]
 
 // Do you want to see the shape of the polygon cut in half?
-half_polygon_only = "Yes"; // ["No", "Yes"]
+half_polygon_only = "No"; // ["No", "Yes"]
 
 // Do you want a whole sphericon, or half of one? (print two halves and glue them together)
 half_or_whole = "Whole"; // ["Half", "Whole"]
@@ -20,26 +20,32 @@ hollow = "No"; // ["No", "Yes"]
 faces = 360; // [10:360]
 
 // Do you want a continuous face or edge (for even numbers of sides only)
-continuous = "Face"; // ["Face", "Edge"]
+continuous = "Edge"; // ["Face", "Edge"]
 
 // Do you want a bulbous appearance?
-bulbous = "No"; // ["No", "Yes"]
+bulbous = "Yes"; // ["No", "Yes"]
 
-module modified_polygon(N)
+module bulbous_polygon(N)
 {
     difference()
     {
         union()
         {
-            regular_polygon(N);
-            if (bulbous == "Yes")
-                for(p = polygon_points(N))
-                    translate(p) circle(r=polygon_side_length(N)/3, $fn=90);
+            circle(r=1,$fn=90);
+            for (p = polygon_points(N))
+                translate(p) circle(r=polygon_arc_length(N)/4, $fn=90);
         }
-        if (bulbous == "Yes")
-            for(p = polygon_side_midpoints(N))
-                translate(p) circle(r=polygon_side_length(N)/6, $fn=90);
+        for (p = polygon_middle_points(N))
+            translate(p) circle(r=polygon_arc_length(N)/4, $fn=90);
     }
+}
+
+module modified_polygon(N)
+{
+    if (bulbous == "Yes")
+        bulbous_polygon(N);
+    else
+        regular_polygon(N);
 }
 
 module extruded_shape(N)
@@ -67,7 +73,7 @@ scale(scale/2)
         if (half_polygon_only == "Yes")
             extruded_shape(sides);
         else
-            regular_polygon(sides);
+            modified_polygon(sides);
     }
     else if (hollow == "No")
     {
