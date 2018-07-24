@@ -2,7 +2,7 @@
 scale = 50;
 
 // How many sides should the polygon have?
-sides = 9; // [3:32]
+sides = 6; // [3:32]
 
 // Do you want to see the shape of the polygon without the rotate extrustion?
 polygon_only = "No"; // ["No", "Yes"]
@@ -11,13 +11,13 @@ polygon_only = "No"; // ["No", "Yes"]
 half_polygon_only = "No"; // ["No", "Yes"]
 
 // Do you want a whole sphericon, or half of one? (print two halves and glue them together)
-half_or_whole = "Whole"; // ["Half", "Whole"]
+half_or_whole = "Half"; // ["Half", "Whole"]
 
 // Do you want it hollow on the inside?
 hollow = "No"; // ["No", "Yes"]
 
 // How smooth should it be? (More faces is smoother)
-faces = 360; // [10:360]
+faces = 180; // [10:360]
 
 // Do you want a continuous face or edge (for even numbers of sides only)
 continuous = "Edge"; // ["Face", "Edge"]
@@ -31,12 +31,12 @@ module bulbous_polygon(N)
     {
         union()
         {
-            circle(r=1,$fn=90);
+            circle(r=1,$fn=faces);
             for (p = polygon_points(N))
-                translate(p) circle(r=polygon_arc_length(N)/4, $fn=90);
+                translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
         }
         for (p = polygon_middle_points(N))
-            translate(p) circle(r=polygon_arc_length(N)/4, $fn=90);
+            translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
     }
 }
 
