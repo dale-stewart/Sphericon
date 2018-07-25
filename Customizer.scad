@@ -2,7 +2,7 @@
 scale = 50;
 
 // How many sides should the polygon have?
-sides = 6; // [3:32]
+sides = 4; // [3:32]
 
 // Do you want to see the shape of the polygon without the rotate extrustion?
 polygon_only = "No"; // ["No", "Yes"]
@@ -17,28 +17,13 @@ half_or_whole = "Half"; // ["Half", "Whole"]
 hollow = "No"; // ["No", "Yes"]
 
 // How smooth should it be? (More faces is smoother)
-faces = 180; // [10:360]
+faces = 90; // [10:360]
 
 // Do you want a continuous face or edge (for even numbers of sides only)
-continuous = "Edge"; // ["Face", "Edge"]
+continuous = "Face"; // ["Face", "Edge"]
 
 // Do you want a bulbous appearance?
-bulbous = "Yes"; // ["No", "Yes"]
-
-module bulbous_polygon(N)
-{
-    difference()
-    {
-        union()
-        {
-            circle(r=1,$fn=faces);
-            for (p = polygon_points(N))
-                translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
-        }
-        for (p = polygon_middle_points(N))
-            translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
-    }
-}
+bulbous = "No"; // ["No", "Yes"]
 
 module modified_polygon(N)
 {

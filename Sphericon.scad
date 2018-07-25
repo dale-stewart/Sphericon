@@ -2,7 +2,7 @@ function polygon_angles(order) = [ for (i = [0:order-1]) i*(360/order) - 90];
 
 function polygon_points(order) = [ for (th=polygon_angles(order)) [cos(th), sin(th)] ];
 
-function polygon_middle_angles(order) = [ for (i = [0:order-1]) (i + 0.5) *(360/order) - 90];
+function polygon_middle_angles(order) = [ for (i = [0:order-1]) (i + 0.5) * (360/order) - 90];
 
 function polygon_middle_points(order) = [ for (th=polygon_middle_angles(order)) [cos(th), sin(th)] ];
 
@@ -15,6 +15,21 @@ function polygon_arc_length(order) = 2 * 3.14159 / order;
 module regular_polygon(order)
 {
     polygon(polygon_points(order));
+}
+
+module bulbous_polygon(N)
+{
+    difference()
+    {
+        union()
+        {
+            circle(r=1,$fn=faces);
+            for (p = polygon_points(N))
+                translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
+        }
+        for (p = polygon_middle_points(N))
+            translate(p) circle(r=polygon_arc_length(N)/4, $fn=faces);
+    }
 }
 
 module half_sphericon(N)
